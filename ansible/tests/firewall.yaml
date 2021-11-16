@@ -1,0 +1,16 @@
+tests_include:
+  - check_firewall_counter
+
+### ---------------------------------------------------------------------------------
+### Assert that no firewall policies have 0 for a counter
+### ---------------------------------------------------------------------------------
+check_firewall_counter:
+  - command: show security policies hit-count
+
+  - iterate:
+      id: policy-hit-count-policy-name
+      xpath: //policy-hit-count-entry
+      tests:
+        - not-equal: policy-hit-count-count, 0
+          info: Find security policies with less than 1 matches
+          err: Security policy {{post['policy-hit-count-policy-name']}} has zero matches
